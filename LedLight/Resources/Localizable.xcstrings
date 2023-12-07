@@ -1,13 +1,31 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@" : {
+
+    },
+    "Add peripheral" : {
+
+    },
+    "Available devices" : {
+
+    },
+    "Current peripheral" : {
+
+    },
     "Home" : {
+
+    },
+    "Last peripheral" : {
+
+    },
+    "Saved peripheral" : {
 
     },
     "Settings" : {
 
     },
-    "Tabbar" : {
+    "Some peripheral" : {
 
     }
   },

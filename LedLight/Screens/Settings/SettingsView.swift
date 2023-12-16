@@ -9,28 +9,54 @@ import SwiftUI
 
 struct SettingsView: View {
     
+    @ObservedObject var appViewModel: AppViewModel
     @StateObject private var settingsViewModel: SettingsViewModel = .init()
+    
     @State private var isPeripheralSearchPresented: Bool = false
     
     var body: some View {
         NavigationStack {
             ZStack {
                 Color.custom.background.ignoresSafeArea()
-                Form {
-                    Section("Current peripheral") {
-                        Text("Some peripheral")
+                VStack {
+                    VStack(alignment: .leading) {
+                        Text("Current peripheral")
+                            .font(.headline)
+                            .padding(.horizontal)
+                        SettingsPeripheralCell(settingsViewModel: settingsViewModel)
+                            .padding(.horizontal)
+                        Divider()
                     }
                     
-                    Section("Last peripheral") {
-                        Text("Some peripheral")
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text("Saved peripherals")
+                                .font(.headline)
+                                .padding(.horizontal)
+                            Spacer()
+                            Button("Clear") {
+                                settingsViewModel.clearPeripheralsSavedList()
+                            }
+                            .padding(.horizontal)
+                        }
+                        if settingsViewModel.savedPeripheralsList.count == 0 {
+                            SavedPeripheralCell(savedPeripheral: nil)
+                                .padding(.horizontal)
+                        } else {
+                            ScrollView {
+                                ForEach(settingsViewModel.savedPeripheralsList, id: \.uuid) { peripheral in
+                                    SavedPeripheralCell(savedPeripheral: peripheral) {
+                                        settingsViewModel.removePeripheralFromSavedList(peripheral: peripheral)
+                                    }
+                                    .padding(.horizontal)
+                                    .onTapGesture {
+                                        print("Нажали на ячейку")
+                                    }
+                                }
+                            }
+                        }
                     }
-                    
-                    Section("Saved peripheral") {
-                        Text("Some peripheral")
-                    }
-                }
-                .background {
-                    Color.custom.background
+                    Spacer()
                 }
             }
             .toolbar {
@@ -41,12 +67,12 @@ struct SettingsView: View {
                 }
             }
             .sheet(isPresented: $isPeripheralSearchPresented) {
-                SearchView()
+                SearchView(settingsViewModel: settingsViewModel, isPresented: $isPeripheralSearchPresented)
             }
         }
     }
 }
 
 #Preview {
-    SettingsView()
+    SettingsView(appViewModel: AppViewModel())
 }

@@ -9,34 +9,43 @@ import SwiftUI
 
 struct SearchView: View {
     
-    @StateObject private var searchViewModel: SearchViewModel = .init()
+    @ObservedObject var settingsViewModel: SettingsViewModel
+    @Binding var isPresented: Bool
     
     var body: some View {
         ZStack {
             Color.custom.background.ignoresSafeArea()
+            
             VStack(alignment: .center, spacing: 10) {
                 Text("Available devices")
                     .font(.title)
                     .padding(.top)
+                
                 ScrollView {
-                    ForEach(searchViewModel.peripherals, id: \.identifier) { peripheral in
+                    ForEach(settingsViewModel.peripherals, id: \.identifier) { peripheral in
                         SearchPeripheralCell(peripheral: peripheral)
                             .padding(.horizontal)
                             .padding(.vertical, 8)
+                            .onTapGesture {
+                                settingsViewModel.stopScanForPeripherals()
+                                settingsViewModel.connectToCurrentPeripheral(peripheral: peripheral)
+                                settingsViewModel.savePeripheralToStorageList(peripheral: peripheral)
+                                isPresented = false
+                            }
                     }
                 }
                 .scrollIndicators(.hidden)
             }
         }
         .onAppear {
-            searchViewModel.startScanForPeripherals()
+            settingsViewModel.startScanForPeripherals()
         }
         .onDisappear {
-            searchViewModel.stopScanForPeripherals()
+            settingsViewModel.stopScanForPeripherals()
         }
     }
 }
 
 #Preview {
-    SearchView()
+    SearchView(settingsViewModel: SettingsViewModel(), isPresented: .constant(true))
 }

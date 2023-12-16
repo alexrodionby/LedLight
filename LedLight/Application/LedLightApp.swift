@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct LedLightApp: App {
+    
+    @StateObject private var appViewModel = AppViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            TabBarView()
+            TabBarView(appViewModel: appViewModel)
+                .preferredColorScheme(.dark)
         }
     }
 }

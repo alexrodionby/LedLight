@@ -8,11 +8,28 @@
 import SwiftUI
 
 struct HomeView: View {
+    
+    @ObservedObject var appViewModel: AppViewModel
+    @StateObject private var homeViewModel: HomeViewModel = .init()
+    
     var body: some View {
-        Text("Home")
+        NavigationStack {
+            ZStack {
+                Color.custom.background.ignoresSafeArea()
+                if appViewModel.currentPeripheral?.identifier.uuidString == Constants.deviceUUID {
+                    // экран устройства
+                } else {
+                    if let peripheral = appViewModel.currentPeripheral {
+                        Text(peripheral.name ?? "No Device Name")
+                    } else {
+                        Text("No Device Connected")
+                    }
+                }
+            }
+        }
     }
 }
 
 #Preview {
-    HomeView()
+    HomeView(appViewModel: AppViewModel())
 }

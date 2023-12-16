@@ -14,7 +14,7 @@ struct SearchPeripheralCell: View {
     
     var body: some View {
         HStack {
-            Text(peripheral?.name ?? "no name")
+            Text(peripheral?.name ?? "No Device Name")
         }
         .frame(maxWidth: .infinity, minHeight: 50)
         .background {
@@ -27,4 +27,5 @@ struct SearchPeripheralCell: View {
 
 #Preview {
     SearchPeripheralCell()
+        .padding()
 }

@@ -10,15 +10,16 @@ import SwiftUI
 struct TabBarView: View {
     
     @State private var selectedTab: Int = Tabs.tab1.tag
+    @ObservedObject var appViewModel: AppViewModel
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            HomeView()
+            HomeView(appViewModel: appViewModel)
                 .tabItem {
                     Label("\(Tabs.tab1.labelName)", systemImage: Tabs.tab1.labelIcon)
                 }
                 .tag(Tabs.tab1.tag)
-            SettingsView()
+            SettingsView(appViewModel: appViewModel)
                 .tabItem {
                     Label("\(Tabs.tab2.labelName)", systemImage: Tabs.tab2.labelIcon)
                 }
@@ -60,5 +61,6 @@ enum Tabs {
 }
 
 #Preview {
-    TabBarView()
+    TabBarView(appViewModel: AppViewModel())
+        .preferredColorScheme(.dark)
 }

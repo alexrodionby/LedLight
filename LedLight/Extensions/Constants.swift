@@ -10,5 +10,5 @@ import Foundation
 // Здесь хранятся константы, которые используются в проекте
 
 struct Constants {
-    
+    static let deviceUUID = ""
 }
